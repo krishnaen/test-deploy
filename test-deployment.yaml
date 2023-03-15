@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: knr-test-image-pull
+ namespace: default
+spec:
+ replicas: 1
+ serviceName: knr-image-pull
+ selector:
+  matchLabels:
+   app: knr-image-pull
+ template:
+  metadata:
+   labels:
+    app: knr-image-pull
+  spec:
+   containers:
+   - name: knr-image-pull
+    image: dev0-artifacts-registry.cn-shanghai.cr.aliyuncs.com/stargate/sfci/falcon-ali/kube-node-recycler-ali/test_docker_build:jenkins-falcon-ali-kube-node-recycler-ali-PR-8-1-itest
+    ports:
+    - containerPort: 80
