@@ -22,3 +22,17 @@ spec:
 
 
 kst-shh62f477f9avkfvdavlv
+
+
+apiVersion: v1
+data:
+  pod-eviction-config.yaml: |-
+    items:
+{{ toYaml [] | indent 4 }}
+kind: ConfigMap
+metadata:
+  labels: 
+    app.kubernetes.io/name: kube-node-recycler
+    app.kubernetes.io/part-of: clustermanagement
+  name: kube-node-recycler
+  namespace: default
