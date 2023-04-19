@@ -36,3 +36,6 @@ metadata:
     app.kubernetes.io/part-of: clustermanagement
   name: kube-node-recycler
   namespace: default
+
+
+vsw-uf6652fp02hv3atxmgpa2 vsw-uf6whnc357dpgg5j8vhyf vsw-uf6ihh1mubwcsata1f2h
