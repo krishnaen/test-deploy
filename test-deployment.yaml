@@ -37,5 +37,4 @@ metadata:
   name: kube-node-recycler
   namespace: default
 
-
-vsw-uf6652fp02hv3atxmgpa2 vsw-uf6whnc357dpgg5j8vhyf vsw-uf6ihh1mubwcsata1f2h
+kubectl get nodes --show-labels|awk -F" " {'print $6'}|awk -F"," {'print $17'}|sort -u
