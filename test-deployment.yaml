@@ -38,3 +38,32 @@ metadata:
   namespace: default
 
 kubectl get nodes --show-labels|awk -F" " {'print $6'}|awk -F"," {'print $17'}|sort -u
+
+
+
+#!/bin/sh
+
+#Usage: $0 <K8s Cluster Name>
+
+acs-sso login --env 
+
+if [ $? -ne 0 ];then
+	#something failed, try harder
+  rm -f ~/.alibabacloud_sso_sts; acs-sso login --env
+fi
+
+set -e # if anything else fails, abort
+set -x # be verbose
+# Export the creds from sso
+eval `acs-sso login --env`
+
+# get kubeconfig for a specific cluster.  If an arg is passed then use that, else if $CLUSTER_NAME is set use that, else "sam-processing1"
+CLUSTER_NAME=${1:-${CLUSTER_NAME:ciac-dce-knr-cluster1}}
+CLUSTER_ID=(`aliyun cs DescribeClusters | jq -r ".[] | select( .name == \"${CLUSTER_NAME}\") | .cluster_id"`)
+
+if [ -z "$CLUSTER_ID" ];then
+  echo -e "\n\nCould not find cluster ID for '$CLUSTER_NAME' - discovered cluster names:"
+  aliyun cs DescribeClusters | jq -r ".[].name"
+else
+  aliyun cs DescribeClusterUserKubeconfig --TemporaryDurationMinutes 60 --ClusterId ${CLUSTER_ID} | jq -r '.config' > ~/.kube/config
+fi
